@@ -40,8 +40,8 @@ export class SecurityModule {
    */
   generateToken(payload: JWTPayload): string {
     return jwt.sign(payload, this.jwtSecret, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '24h'
-    });
+      expiresIn: '24h'
+    }) as string;
   }
 
   /**
