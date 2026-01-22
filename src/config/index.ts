@@ -70,7 +70,12 @@ export const config: AppConfig = {
   },
   
   security: {
-    jwtSecret: process.env.JWT_SECRET || 'default_secret_change_in_production',
+    jwtSecret: (() => {
+      if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+        throw new Error('JWT_SECRET must be set in production environment');
+      }
+      return process.env.JWT_SECRET || 'default_secret_change_in_production';
+    })(),
     jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
     bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '10', 10),
     corsOrigin: process.env.CORS_ORIGIN || '*'

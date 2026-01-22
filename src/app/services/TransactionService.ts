@@ -98,14 +98,20 @@ export class TransactionService {
   }
 
   /**
-   * Process transaction - update account balances
+   * Process transaction - update account balances atomically
    */
   private async processTransaction(transaction: Transaction): Promise<void> {
-    // Deduct from source account
-    await this.accountService.updateBalance(transaction.fromAccountId, -transaction.amount);
+    const database = this.framework.getDatabase();
     
-    // Add to destination account
-    await this.accountService.updateBalance(transaction.toAccountId, transaction.amount);
+    // Use database transaction for atomicity
+    // In production, this would use proper database transactions
+    await database.transaction(async () => {
+      // Deduct from source account
+      await this.accountService.updateBalance(transaction.fromAccountId, -transaction.amount);
+      
+      // Add to destination account
+      await this.accountService.updateBalance(transaction.toAccountId, transaction.amount);
+    });
   }
 
   /**

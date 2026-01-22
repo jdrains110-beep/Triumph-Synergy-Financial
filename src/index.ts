@@ -78,6 +78,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // User endpoints
+// TODO: Add rate limiting for production deployment to prevent brute force attacks
+// Consider using express-rate-limit middleware for authentication endpoints
 app.post('/api/users/register', async (req: Request, res: Response) => {
   try {
     const user = await userService.createUser(req.body);

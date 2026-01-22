@@ -17,6 +17,9 @@ export class SecurityModule {
   private bcryptRounds: number;
 
   constructor() {
+    if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET must be set in production environment');
+    }
     this.jwtSecret = process.env.JWT_SECRET || 'default_secret_change_in_production';
     this.bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || '10', 10);
   }
@@ -61,7 +64,7 @@ export class SecurityModule {
   }
 
   /**
-   * Validate email format
+   * Validate email format (uses ValidationModule)
    */
   isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

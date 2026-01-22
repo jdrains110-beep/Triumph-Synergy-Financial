@@ -18,6 +18,14 @@ export interface ValidationResult {
 
 export class ValidationModule {
   /**
+   * Validate email format (shared utility)
+   */
+  validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  /**
    * Validate data against rules
    */
   validate(data: Record<string, any>, rules: ValidationRule[]): ValidationResult {
@@ -35,8 +43,7 @@ export class ValidationModule {
           break;
 
         case 'email':
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (value && !emailRegex.test(value)) {
+          if (value && !this.validateEmail(value)) {
             errors.push({ field: rule.field, message: `${rule.field} must be a valid email` });
           }
           break;

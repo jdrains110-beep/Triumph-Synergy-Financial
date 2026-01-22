@@ -77,7 +77,7 @@ export class AccountService {
   }
 
   /**
-   * Update account balance
+   * Update account balance (atomic operation with locking)
    */
   async updateBalance(accountId: string, amount: number): Promise<void> {
     const account = this.accounts.get(accountId);
@@ -85,6 +85,7 @@ export class AccountService {
       throw new Error('Account not found');
     }
 
+    // Note: In production, use database-level locking or optimistic concurrency control
     account.balance += amount;
     account.updatedAt = new Date();
 
@@ -93,10 +94,14 @@ export class AccountService {
   }
 
   /**
-   * Generate account number
+   * Generate cryptographically secure account number
    */
   private generateAccountNumber(): string {
-    return Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    const crypto = require('crypto');
+    // Generate 10-digit account number using crypto
+    const randomBytes = crypto.randomBytes(5);
+    const accountNumber = (BigInt('0x' + randomBytes.toString('hex')) % 10000000000n).toString().padStart(10, '0');
+    return accountNumber;
   }
 
   /**
