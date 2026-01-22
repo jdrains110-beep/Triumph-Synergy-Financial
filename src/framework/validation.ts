@@ -28,7 +28,8 @@ export class ValidationModule {
   /**
    * Validate data against rules
    */
-  validate(data: Record<string, unknown> | object, rules: ValidationRule[]): ValidationResult {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  validate(data: any, rules: ValidationRule[]): ValidationResult {
     const errors: Array<{ field: string; message: string }> = [];
 
     for (const rule of rules) {

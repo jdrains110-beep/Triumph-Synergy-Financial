@@ -32,8 +32,11 @@ export class Logger {
   }
 
   error(message: string, error?: Error | unknown): void {
-    const errorObj = error as Error | undefined;
-    this.logger.error(message, { error: errorObj?.message || error, stack: errorObj?.stack });
+    if (error instanceof Error) {
+      this.logger.error(message, { error: error.message, stack: error.stack });
+    } else {
+      this.logger.error(message, { error: String(error) });
+    }
   }
 
   warn(message: string, meta?: Record<string, unknown>): void {
