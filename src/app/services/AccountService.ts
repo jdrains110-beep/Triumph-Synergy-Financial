@@ -6,6 +6,7 @@
 import { Framework } from '../../framework';
 import { Account, CreateAccountDTO, AccountSummary } from '../models/Account';
 import { v4 as uuidv4 } from 'uuid';
+import * as crypto from 'crypto';
 
 export class AccountService {
   private framework: Framework;
@@ -97,7 +98,6 @@ export class AccountService {
    * Generate cryptographically secure account number
    */
   private generateAccountNumber(): string {
-    const crypto = require('crypto');
     // Generate 10-digit account number using crypto
     const randomBytes = crypto.randomBytes(5);
     const accountNumber = (BigInt('0x' + randomBytes.toString('hex')) % 10000000000n).toString().padStart(10, '0');

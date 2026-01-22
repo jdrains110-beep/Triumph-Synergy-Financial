@@ -27,19 +27,20 @@ export class Logger {
     });
   }
 
-  info(message: string, meta?: any): void {
+  info(message: string, meta?: Record<string, unknown>): void {
     this.logger.info(message, meta);
   }
 
-  error(message: string, error?: any): void {
-    this.logger.error(message, { error: error?.message || error, stack: error?.stack });
+  error(message: string, error?: Error | unknown): void {
+    const errorObj = error as Error | undefined;
+    this.logger.error(message, { error: errorObj?.message || error, stack: errorObj?.stack });
   }
 
-  warn(message: string, meta?: any): void {
+  warn(message: string, meta?: Record<string, unknown>): void {
     this.logger.warn(message, meta);
   }
 
-  debug(message: string, meta?: any): void {
+  debug(message: string, meta?: Record<string, unknown>): void {
     this.logger.debug(message, meta);
   }
 }

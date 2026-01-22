@@ -6,9 +6,9 @@
 export interface ValidationRule {
   field: string;
   type: 'required' | 'email' | 'minLength' | 'maxLength' | 'number' | 'positive' | 'custom';
-  value?: any;
+  value?: unknown;
   message?: string;
-  validator?: (value: any) => boolean;
+  validator?: (value: unknown) => boolean;
 }
 
 export interface ValidationResult {
@@ -28,11 +28,11 @@ export class ValidationModule {
   /**
    * Validate data against rules
    */
-  validate(data: Record<string, any>, rules: ValidationRule[]): ValidationResult {
+  validate(data: Record<string, unknown> | object, rules: ValidationRule[]): ValidationResult {
     const errors: Array<{ field: string; message: string }> = [];
 
     for (const rule of rules) {
-      const value = data[rule.field];
+      const value = (data as Record<string, unknown>)[rule.field];
       const message = rule.message || `Validation failed for ${rule.field}`;
 
       switch (rule.type) {
@@ -43,19 +43,19 @@ export class ValidationModule {
           break;
 
         case 'email':
-          if (value && !this.validateEmail(value)) {
+          if (value && !this.validateEmail(value as string)) {
             errors.push({ field: rule.field, message: `${rule.field} must be a valid email` });
           }
           break;
 
         case 'minLength':
-          if (value && value.length < (rule.value || 0)) {
+          if (value && (value as string).length < (rule.value as number || 0)) {
             errors.push({ field: rule.field, message: `${rule.field} must be at least ${rule.value} characters` });
           }
           break;
 
         case 'maxLength':
-          if (value && value.length > (rule.value || 0)) {
+          if (value && (value as string).length > (rule.value as number || 0)) {
             errors.push({ field: rule.field, message: `${rule.field} must be at most ${rule.value} characters` });
           }
           break;
