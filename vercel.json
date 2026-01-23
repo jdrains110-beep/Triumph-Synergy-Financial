@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/validation-key.txt",
+      "dest": "/pi-domain-validation"
+    },
+    {
+      "src": "/.well-known/pi-domain-validation.txt",
+      "dest": "/pi-domain-validation"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "PI_API_KEY": "@pi_api_key",
+    "PI_API_URL": "https://api.minepi.com",
+    "PI_TESTNET_VALIDATION_KEY": "@pi_testnet_validation_key",
+    "PI_MAINNET_VALIDATION_KEY": "@pi_mainnet_validation_key"
+  }
+}
