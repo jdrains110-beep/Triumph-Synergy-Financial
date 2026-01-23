@@ -50,58 +50,68 @@ app.use(express.urlencoded({ extended: true }));
 
 // Standard Pi validation path - checks Host header for environment
 app.get('/.well-known/pi-domain-validation.txt', (req: Request, res: Response) => {
-  const host = req.get('host') || '';
-  console.log(`Pi validation request from host: ${host}`);
+  try {
+    const host = req.get('host') || '';
+    console.log(`Pi validation request from host: ${host}`);
 
-  // Check for testnet subdomain (correct Pi validation pattern)
-  if (host.startsWith('testnet.') || host.includes('testnet.')) {
-    const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
-    if (!testnetKey) {
-      console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
-      return res.status(500).send('Server configuration error');
+    // Check for testnet subdomain (correct Pi validation pattern)
+    if (host.startsWith('testnet.') || host.includes('testnet.')) {
+      const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
+      if (!testnetKey) {
+        console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
+        return res.status(500).send('Server configuration error');
+      }
+      console.log('Returning testnet validation key from environment');
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      res.send(testnetKey);
+    } else {
+      const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
+      if (!mainnetKey) {
+        console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
+        return res.status(500).send('Server configuration error');
+      }
+      console.log('Returning mainnet validation key from environment');
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      res.send(mainnetKey);
     }
-    console.log('Returning testnet validation key from environment');
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    res.set('Cache-Control', 'no-cache');
-    res.send(testnetKey);
-  } else {
-    const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
-    if (!mainnetKey) {
-      console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
-      return res.status(500).send('Server configuration error');
-    }
-    console.log('Returning mainnet validation key from environment');
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    res.set('Cache-Control', 'no-cache');
-    res.send(mainnetKey);
+  } catch (error) {
+    console.error('Error in Pi validation endpoint:', error);
+    res.status(500).send('Internal server error');
   }
 });
 
 // Legacy validation path - MUST BE BEFORE static middleware
 app.get('/validation-key.txt', (req: Request, res: Response) => {
-  const host = req.get('host') || '';
-  console.log(`Legacy validation from host header: ${host}`);
+  try {
+    const host = req.get('host') || '';
+    console.log(`Legacy validation from host header: ${host}`);
 
-  if (host.startsWith('testnet.') || host.includes('testnet.')) {
-    const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
-    if (!testnetKey) {
-      console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
-      return res.status(500).send('Server configuration error');
+    if (host.startsWith('testnet.') || host.includes('testnet.')) {
+      const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
+      if (!testnetKey) {
+        console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
+        return res.status(500).send('Server configuration error');
+      }
+      console.log('Returning TESTNET key');
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      res.send(testnetKey);
+    } else {
+      const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
+      if (!mainnetKey) {
+        console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
+        return res.status(500).send('Server configuration error');
+      }
+      console.log('Returning MAINNET key');
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      res.send(mainnetKey);
     }
-    console.log('Returning TESTNET key');
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    res.set('Cache-Control', 'no-cache');
-    res.send(testnetKey);
-  } else {
-    const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
-    if (!mainnetKey) {
-      console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
-      return res.status(500).send('Server configuration error');
-    }
-    console.log('Returning MAINNET key');
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    res.set('Cache-Control', 'no-cache');
-    res.send(mainnetKey);
+  } catch (error) {
+    console.error('Error in validation-key.txt endpoint:', error);
+    res.status(500).send('Internal server error');
   }
 });
 

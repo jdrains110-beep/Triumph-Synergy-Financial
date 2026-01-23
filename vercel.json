@@ -8,14 +8,6 @@
   ],
   "routes": [
     {
-      "src": "/validation-key.txt",
-      "dest": "/pi-domain-validation"
-    },
-    {
-      "src": "/.well-known/pi-domain-validation.txt",
-      "dest": "/pi-domain-validation"
-    },
-    {
       "src": "/(.*)",
       "dest": "/"
     }
