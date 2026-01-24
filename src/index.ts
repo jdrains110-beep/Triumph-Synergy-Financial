@@ -13,6 +13,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import fs from 'fs';
 import { config } from './config';
 import { Framework } from './framework';
 import { UserService } from './app/services/UserService';
@@ -141,8 +142,53 @@ app.get('/pi-domain-validation.txt', (req: Request, res: Response) => {
   }
 });
 
-// Serve static files from public directory (for Pi Browser frontend)
+// Serve static files with domain-based routing (for Pi Browser frontend)
 // This MUST come AFTER validation routes
+app.use('/validation-key.txt', (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const host = req.get('host') || '';
+    const isTestnet = host.startsWith('testnet.') || host.includes('testnet.');
+
+    const staticPath = isTestnet
+      ? path.join(__dirname, '../public/testnet/validation-key.txt')
+      : path.join(__dirname, '../public/mainnet/validation-key.txt');
+
+    if (fs.existsSync(staticPath)) {
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      res.sendFile(staticPath);
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.error('Error serving validation-key.txt:', error);
+    next();
+  }
+});
+
+app.use('/.well-known/pi-domain-validation.txt', (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const host = req.get('host') || '';
+    const isTestnet = host.startsWith('testnet.') || host.includes('testnet.');
+
+    const staticPath = isTestnet
+      ? path.join(__dirname, '../public/testnet/.well-known/pi-domain-validation.txt')
+      : path.join(__dirname, '../public/mainnet/.well-known/pi-domain-validation.txt');
+
+    if (fs.existsSync(staticPath)) {
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      res.sendFile(staticPath);
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.error('Error serving pi-domain-validation.txt:', error);
+    next();
+  }
+});
+
+// Serve other static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Debug endpoint to check validation setup
