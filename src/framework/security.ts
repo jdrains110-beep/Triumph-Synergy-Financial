@@ -4,23 +4,16 @@
  */
 
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
 
-export interface JWTPayload {
-  userId: string;
-  email: string;
-  role: string;
-}
+
+
 
 export class SecurityModule {
-  private jwtSecret: string;
+
   private bcryptRounds: number;
 
   constructor() {
-    if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET must be set in production environment');
-    }
-    this.jwtSecret = process.env.JWT_SECRET || 'default_secret_change_in_production';
+
     this.bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || '10', 10);
   }
 
@@ -38,21 +31,7 @@ export class SecurityModule {
     return await bcrypt.compare(password, hash);
   }
 
-  /**
-   * Generate JWT token
-   */
-  generateToken(payload: JWTPayload): string {
-    return jwt.sign(payload, this.jwtSecret, {
-      expiresIn: '24h'
-    }) as string;
-  }
 
-  /**
-   * Verify JWT token
-   */
-  verifyToken(token: string): JWTPayload {
-    return jwt.verify(token, this.jwtSecret) as JWTPayload;
-  }
 
   /**
    * Sanitize user input to prevent XSS

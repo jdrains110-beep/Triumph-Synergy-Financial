@@ -5,9 +5,9 @@
 ### ✅ Implemented Security Features
 
 1. **Authentication & Authorization**
-   - JWT-based authentication with secure token generation
+   - Secure authentication (no JWT)
    - Password hashing using bcrypt (configurable rounds)
-   - Production JWT secret validation (throws error if not set)
+   - No JWT secret required
 
 2. **Input Validation**
    - Comprehensive validation module for all user inputs
@@ -64,7 +64,7 @@
 
 Before deploying to production, ensure:
 
-- [ ] Set unique JWT_SECRET environment variable
+
 - [ ] Implement rate limiting on authentication endpoints
 - [ ] Configure database connection (PostgreSQL)
 - [ ] Set specific CORS origins

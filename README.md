@@ -30,7 +30,7 @@ The framework provides modular, reusable components:
 - **Core Module**: Framework initialization and orchestration
 - **Logger**: Centralized logging using Winston
 - **Database Manager**: Database connection and transaction handling
-- **Security Module**: JWT authentication, password hashing, input sanitization
+-- **Security Module**: password hashing, input sanitization
 - **Validation Module**: Input validation and business rule enforcement
 - **Pi SDK Service**: Pi Network authentication and payment processing
 
@@ -67,7 +67,7 @@ Full integration with Pi Network Platform:
 ### User Management
 
 - User registration with email validation
-- Secure authentication with JWT tokens
+-- Secure authentication (no JWT)
 - Password hashing with bcrypt
 - User profile management
 - **Pi Network user authentication**
@@ -96,7 +96,7 @@ Full integration with Pi Network Platform:
 
 ### Security
 
-- JWT-based authentication
+-- Secure authentication (no JWT)
 - Password hashing with bcrypt
 - Input sanitization to prevent XSS
 - Secure API endpoints
@@ -297,7 +297,7 @@ The application is configured through environment variables:
 | `PORT` | Server port | `3000` |
 | `MAIN_APP_URL` | Main app URL | `https://triumphsynergydi8363.pinet.com` |
 | `FRAMEWORK_URL` | Framework URL | `https://triumphsynergy0576.pinet.com` |
-| `JWT_SECRET` | JWT secret key | (required) |
+
 | `DB_HOST` | Database host | `localhost` |
 | `DB_PORT` | Database port | `5432` |
 | `LOG_LEVEL` | Logging level | `info` |
@@ -331,7 +331,7 @@ The application is configured through environment variables:
 
 - **Runtime**: Node.js with TypeScript
 - **Framework**: Express.js
-- **Security**: JWT, bcrypt, Helmet, CORS
+-- **Security**: bcrypt, Helmet, CORS
 - **Logging**: Winston
 - **Database**: PostgreSQL with TypeORM
 - **Validation**: Custom validation module

@@ -82,6 +82,59 @@ app.get('/.well-known/pi-domain-validation.txt', (req: Request, res: Response) =
   }
 });
 
+// Legacy/alternate validation path used by some validators
+app.get('/validation-key.txt', (req: Request, res: Response) => {
+  try {
+    const host = req.get('host') || '';
+    console.log(`Validation-key request from host: ${host}`);
+
+    if (host.startsWith('testnet.') || host.includes('testnet.')) {
+      const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
+      if (!testnetKey) {
+        console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
+        return res.status(500).send('Server configuration error');
+      }
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      return res.send(testnetKey);
+    }
+
+    const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
+    if (!mainnetKey) {
+      console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
+      return res.status(500).send('Server configuration error');
+    }
+    res.set('Content-Type', 'text/plain; charset=utf-8');
+    res.set('Cache-Control', 'no-cache');
+    return res.send(mainnetKey);
+  } catch (error) {
+    console.error('Error in /validation-key.txt endpoint:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Another compatibility endpoint
+app.get('/pi-domain-validation.txt', (req: Request, res: Response) => {
+  try {
+    const host = req.get('host') || '';
+    if (host.startsWith('testnet.') || host.includes('testnet.')) {
+      const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
+      if (!testnetKey) return res.status(500).send('Server configuration error');
+      res.set('Content-Type', 'text/plain; charset=utf-8');
+      res.set('Cache-Control', 'no-cache');
+      return res.send(testnetKey);
+    }
+    const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
+    if (!mainnetKey) return res.status(500).send('Server configuration error');
+    res.set('Content-Type', 'text/plain; charset=utf-8');
+    res.set('Cache-Control', 'no-cache');
+    return res.send(mainnetKey);
+  } catch (error) {
+    console.error('Error in /pi-domain-validation.txt endpoint:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -167,6 +220,35 @@ app.get('/health', async (req: Request, res: Response) => {
       status: 'unhealthy',
       error: 'Service unavailable'
     });
+  }
+});
+
+// Minimal AI Agent endpoint for VS Code / Vercel AI extension integration
+// Accepts { prompt: string, context?: object } and returns { reply: string, metadata?: object }
+app.post('/api/ai-agent', async (req: Request, res: Response) => {
+  try {
+    const { prompt, context } = req.body || {};
+
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ error: 'Invalid request: prompt is required (string).' });
+    }
+
+    // Basic handling: log the prompt and return a structured response.
+    framework.getLogger().info('AI agent received prompt', { prompt: prompt.substring(0, 200) });
+
+    // TODO: replace with real LLM/agent logic or integration with Vercel Agent hooks.
+    const reply = `Agent echo: ${prompt}`;
+
+    const metadata = {
+      receivedAt: new Date().toISOString(),
+      promptLength: prompt.length,
+      contextSummary: context ? Object.keys(context).slice(0, 10) : []
+    };
+
+    res.json({ reply, metadata });
+  } catch (error: any) {
+    framework.getLogger().error('AI agent handler failed', error);
+    res.status(500).json({ error: 'AI agent handler error' });
   }
 });
 
@@ -316,16 +398,9 @@ app.post('/api/pi/auth', authLimiter, async (req: Request, res: Response) => {
     // Create or update user with Pi credentials
     const user = await userService.createOrUpdatePiUser(authResult.user);
     
-    // Generate JWT token for app authentication
-    const token = framework.getSecurity().generateToken({ 
-      userId: user.id, 
-      email: user.email,
-      role: user.role 
-    });
-
+    // No JWT token generated; just return user and piUser
     res.json({
       user,
-      token,
       piUser: authResult.user
     });
   } catch (error: any) {

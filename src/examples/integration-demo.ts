@@ -129,7 +129,7 @@ export async function demonstrateIntegration() {
     console.log('--------');
     console.log('✅ Framework (triumphsynergy0576.pinet.com) provided:');
     console.log('   - Logging');
-    console.log('   - Security (JWT, password hashing)');
+    console.log('   - Security (password hashing)');
     console.log('   - Validation');
     console.log('   - Database management');
     console.log('');
