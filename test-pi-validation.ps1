@@ -4,11 +4,11 @@ Write-Host "Testing Pi Domain Validation Endpoints..." -ForegroundColor Green
 Write-Host "============================================" -ForegroundColor Yellow
 
 # Test testnet subdomain
-Write-Host "`nTesting Testnet Subdomain: testnet.triumphsynergydi8363.pinet.com" -ForegroundColor Cyan
+Write-Host "`nTesting Testnet Subdomain: testnet.triumphsynergy.com" -ForegroundColor Cyan
 Write-Host "------------------------------------------------------------------" -ForegroundColor Yellow
 
 try {
-    $response = Invoke-WebRequest -Uri "https://testnet.triumphsynergydi8363.pinet.com/.well-known/pi-domain-validation.txt" -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "https://testnet.triumphsynergy.com/.well-known/pi-domain-validation.txt" -UseBasicParsing
     Write-Host "✅ /.well-known/pi-domain-validation.txt: $($response.Content.Length) chars" -ForegroundColor Green
     if ($response.Content.Length -gt 100) {
         Write-Host "   Key starts with: $($response.Content.Substring(0, 20))..." -ForegroundColor Gray
@@ -18,7 +18,7 @@ try {
 }
 
 try {
-    $response = Invoke-WebRequest -Uri "https://testnet.triumphsynergydi8363.pinet.com/debug/pi-validation" -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "https://testnet.triumphsynergy.com/debug/pi-validation" -UseBasicParsing
     Write-Host "✅ /debug/pi-validation: $($response.Content.Length) chars" -ForegroundColor Green
     $json = $response.Content | ConvertFrom-Json
     Write-Host "   Host detected: $($json.host)" -ForegroundColor Gray
@@ -28,11 +28,11 @@ try {
 }
 
 # Test mainnet domain
-Write-Host "`nTesting Mainnet Domain: triumphsynergydi8363.pinet.com" -ForegroundColor Cyan
+Write-Host "`nTesting Mainnet Domain: triumphsynergy.com" -ForegroundColor Cyan
 Write-Host "-------------------------------------------------------" -ForegroundColor Yellow
 
 try {
-    $response = Invoke-WebRequest -Uri "https://triumphsynergydi8363.pinet.com/.well-known/pi-domain-validation.txt" -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "https://triumphsynergy.com/.well-known/pi-domain-validation.txt" -UseBasicParsing
     Write-Host "✅ /.well-known/pi-domain-validation.txt: $($response.Content.Length) chars" -ForegroundColor Green
     if ($response.Content.Length -gt 100) {
         Write-Host "   Key starts with: $($response.Content.Substring(0, 20))..." -ForegroundColor Gray
@@ -42,7 +42,7 @@ try {
 }
 
 try {
-    $response = Invoke-WebRequest -Uri "https://triumphsynergydi8363.pinet.com/debug/pi-validation" -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "https://triumphsynergy.com/debug/pi-validation" -UseBasicParsing
     Write-Host "✅ /debug/pi-validation: $($response.Content.Length) chars" -ForegroundColor Green
     $json = $response.Content | ConvertFrom-Json
     Write-Host "   Host detected: $($json.host)" -ForegroundColor Gray

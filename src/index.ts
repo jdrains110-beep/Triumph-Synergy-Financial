@@ -104,12 +104,34 @@ app.get('/debug/pi-validation', (req: Request, res: Response) => {
       '/.well-known/pi-domain-validation.txt'
     ],
     correctDomains: {
-      testnet: 'testnet.triumphsynergydi8363.pinet.com',
-      mainnet: 'triumphsynergydi8363.pinet.com'
+      testnet: 'testnet.triumphsynergy.com',
+      mainnet: 'triumphsynergy.com'
     },
     environmentVariables: {
       PI_TESTNET_VALIDATION_KEY: testnetKey ? 'SET' : 'NOT SET',
       PI_MAINNET_VALIDATION_KEY: mainnetKey ? 'SET' : 'NOT SET'
+    }
+  });
+});
+
+// Simple environment check endpoint
+app.get('/debug/env-check', (req: Request, res: Response) => {
+  res.json({
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    piNetwork: {
+      apiKey: process.env.PI_API_KEY ? 'SET' : 'NOT SET',
+      testnetApiKey: process.env.PI_TESTNET_API_KEY ? 'SET' : 'NOT SET',
+      mainnetApiKey: process.env.PI_MAINNET_API_KEY ? 'SET' : 'NOT SET',
+      testnetValidationKey: process.env.PI_TESTNET_VALIDATION_KEY ? 'SET' : 'NOT SET',
+      mainnetValidationKey: process.env.PI_MAINNET_VALIDATION_KEY ? 'SET' : 'NOT SET',
+      testnetWalletAddress: process.env.PI_TESTNET_WALLET_ADDRESS ? 'SET' : 'NOT SET'
+    },
+    nextPublic: {
+      piAppId: process.env.NEXT_PUBLIC_PI_APP_ID ? 'SET' : 'NOT SET',
+      ownerPiAddress: process.env.NEXT_PUBLIC_OWNER_PI_ADDRESS ? 'SET' : 'NOT SET',
+      backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
+      apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL
     }
   });
 });
