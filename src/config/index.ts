@@ -27,9 +27,18 @@ export interface AppConfig {
   // Pi Network Configuration
   piNetwork: {
     apiKey: string;
+    testnetApiKey: string;
+    mainnetApiKey: string;
     apiUrl: string;
     sandboxMode: boolean;
     appName: string;
+    testnetWalletAddress: string;
+    appId: string;
+    ownerPiAddress: string;
+    ownerUserId: string;
+    ownerUsername: string;
+    backendUrl: string;
+    apiBaseUrl: string;
   };
   
   // Database Configuration
@@ -70,10 +79,19 @@ export const config: AppConfig = {
   },
   
   piNetwork: {
-    apiKey: process.env.PI_API_KEY || 'du1td5k3lptmqgl7327zwsdwqxczmizgrstgexfjshkqqso3qei8jzafqkyh3lv6',
+    apiKey: process.env.PI_API_KEY || 'hinycem5ehwhtyqnqjjutebqc6abqwboooo7le9ir4ltfoy6ieetqxl36zirwevh',
+    testnetApiKey: process.env.PI_TESTNET_API_KEY || 'du1td5k3lptmqgl7327zwsdwqxczmizgrstgexfjshkqqso3qei8jzafqkyh3lv6',
+    mainnetApiKey: process.env.PI_MAINNET_API_KEY || 'hinycem5ehwhtyqnqjjutebqc6abqwboooo7le9ir4ltfoy6ieetqxl36zirwevh',
     apiUrl: process.env.PI_API_URL || 'https://api.minepi.com',
     sandboxMode: process.env.PI_SANDBOX_MODE === 'true',
-    appName: process.env.PI_APP_NAME || 'Triumph Synergy Financial'
+    appName: process.env.PI_APP_NAME || 'Triumph Synergy Financial',
+    testnetWalletAddress: process.env.PI_TESTNET_WALLET_ADDRESS || 'GCWRILOEJQICSRHPZZ262DJGZMCVPZZASGHWBHMLGVH7DABSSELPK4TD',
+    appId: process.env.NEXT_PUBLIC_PI_APP_ID || 'Triumph-synergy digital financial ecosystem',
+    ownerPiAddress: process.env.NEXT_PUBLIC_OWNER_PI_ADDRESS || 'GDINCI6L7M3J3YTUEMSX3SP2OD7VBJEVX6DTC3BHLD4SD4CMVQ2DVTMF',
+    ownerUserId: process.env.NEXT_PUBLIC_OWNER_USER_ID || 'Jdrains30',
+    ownerUsername: process.env.NEXT_PUBLIC_OWNER_USERNAME || 'jdrains30',
+    backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL || 'https://your-backend-url.com',
+    apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://your-api-url.com'
   },
   
   database: {
