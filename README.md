@@ -362,6 +362,37 @@ npm run lint
 npm test
 ```
 
+## Vercel Deployment
+
+This repository is configured for automatic deployment to Vercel using GitHub Actions.
+
+### Required Secrets
+
+To enable Vercel deployment, a repository administrator must add the following secrets in Repository Settings → Secrets and variables → Actions:
+
+- `VERCEL_TOKEN` — A Vercel personal token with deploy permissions (create at [https://vercel.com/account/tokens](https://vercel.com/account/tokens))
+- `VERCEL_ORG_ID` — The Vercel Organization / Team ID
+- `VERCEL_PROJECT_ID` — The Vercel Project ID for this project
+
+### Deployment Workflow
+
+The deployment workflow (`.github/workflows/deploy-vercel.yml`) automatically:
+- Runs on push to `main` branch
+- Can be manually triggered via workflow_dispatch
+- Validates that all required secrets are present
+- Builds the project with `npm ci` and `npm run build`
+- Deploys to Vercel using the configured credentials
+
+### Setup and Configuration
+
+For detailed setup instructions, including how to configure secrets, local testing, and important notes about PR/fork limitations, see [.github/SETUP.md](.github/SETUP.md).
+
+### Notes
+
+- Secrets are not available to workflows triggered by pull requests from forks (security feature)
+- To test deployment from a PR, push a branch to this repository instead of using a fork
+- The workflow includes early diagnostics to fail fast when secrets are missing
+
 ## License
 
 MIT
