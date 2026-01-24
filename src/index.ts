@@ -13,7 +13,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
-import fs from 'fs';
 import { config } from './config';
 import { Framework } from './framework';
 import { UserService } from './app/services/UserService';
@@ -83,112 +82,7 @@ app.get('/.well-known/pi-domain-validation.txt', (req: Request, res: Response) =
   }
 });
 
-// Legacy validation path - MUST BE BEFORE static middleware
-app.get('/validation-key.txt', (req: Request, res: Response) => {
-  try {
-    const host = req.get('host') || '';
-    console.log(`Legacy validation from host header: ${host}`);
-
-    if (host.startsWith('testnet.') || host.includes('testnet.')) {
-      const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
-      if (!testnetKey) {
-        console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
-        return res.status(500).send('Server configuration error');
-      }
-      console.log('Returning TESTNET key');
-      res.set('Content-Type', 'text/plain; charset=utf-8');
-      res.set('Cache-Control', 'no-cache');
-      res.send(testnetKey);
-    } else {
-      const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
-      if (!mainnetKey) {
-        console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
-        return res.status(500).send('Server configuration error');
-      }
-      console.log('Returning MAINNET key');
-      res.set('Content-Type', 'text/plain; charset=utf-8');
-      res.set('Cache-Control', 'no-cache');
-      res.send(mainnetKey);
-    }
-  } catch (error) {
-    console.error('Error in validation-key.txt endpoint:', error);
-    res.status(500).send('Internal server error');
-  }
-});
-
-// Alternative validation paths that Pi might check
-app.get('/pi-domain-validation.txt', (req: Request, res: Response) => {
-  const host = req.get('host') || '';
-  console.log(`Pi validation (alt path) from host: ${host}`);
-
-  if (host.startsWith('testnet.') || host.includes('testnet.')) {
-    const testnetKey = process.env.PI_TESTNET_VALIDATION_KEY;
-    if (!testnetKey) {
-      console.error('PI_TESTNET_VALIDATION_KEY environment variable not set');
-      return res.status(500).send('Server configuration error');
-    }
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    res.set('Cache-Control', 'no-cache');
-    res.send(testnetKey);
-  } else {
-    const mainnetKey = process.env.PI_MAINNET_VALIDATION_KEY;
-    if (!mainnetKey) {
-      console.error('PI_MAINNET_VALIDATION_KEY environment variable not set');
-      return res.status(500).send('Server configuration error');
-    }
-    res.set('Content-Type', 'text/plain; charset=utf-8');
-    res.set('Cache-Control', 'no-cache');
-    res.send(mainnetKey);
-  }
-});
-
-// Serve static files with domain-based routing (for Pi Browser frontend)
-// This MUST come AFTER validation routes
-app.use('/validation-key.txt', (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const host = req.get('host') || '';
-    const isTestnet = host.startsWith('testnet.') || host.includes('testnet.');
-
-    const staticPath = isTestnet
-      ? path.join(__dirname, '../public/testnet/validation-key.txt')
-      : path.join(__dirname, '../public/mainnet/validation-key.txt');
-
-    if (fs.existsSync(staticPath)) {
-      res.set('Content-Type', 'text/plain; charset=utf-8');
-      res.set('Cache-Control', 'no-cache');
-      res.sendFile(staticPath);
-    } else {
-      next();
-    }
-  } catch (error) {
-    console.error('Error serving validation-key.txt:', error);
-    next();
-  }
-});
-
-app.use('/.well-known/pi-domain-validation.txt', (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const host = req.get('host') || '';
-    const isTestnet = host.startsWith('testnet.') || host.includes('testnet.');
-
-    const staticPath = isTestnet
-      ? path.join(__dirname, '../public/testnet/.well-known/pi-domain-validation.txt')
-      : path.join(__dirname, '../public/mainnet/.well-known/pi-domain-validation.txt');
-
-    if (fs.existsSync(staticPath)) {
-      res.set('Content-Type', 'text/plain; charset=utf-8');
-      res.set('Cache-Control', 'no-cache');
-      res.sendFile(staticPath);
-    } else {
-      next();
-    }
-  } catch (error) {
-    console.error('Error serving pi-domain-validation.txt:', error);
-    next();
-  }
-});
-
-// Serve other static files from public directory
+// Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Debug endpoint to check validation setup
@@ -207,11 +101,7 @@ app.get('/debug/pi-validation', (req: Request, res: Response) => {
     testnetKey: testnetKey ? `${testnetKey.substring(0, 20)}...` : 'NOT SET',
     mainnetKey: mainnetKey ? `${mainnetKey.substring(0, 20)}...` : 'NOT SET',
     availableEndpoints: [
-      '/.well-known/pi-domain-validation.txt',
-      '/pi-domain-validation.txt',
-      '/testnet/.well-known/pi-domain-validation.txt',
-      '/mainnet/.well-known/pi-domain-validation.txt',
-      '/validation-key.txt'
+      '/.well-known/pi-domain-validation.txt'
     ],
     correctDomains: {
       testnet: 'testnet.triumphsynergydi8363.pinet.com',
