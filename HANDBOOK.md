@@ -69,6 +69,8 @@ DNS and Vercel steps:
 - `curl https://triumphsynergy.com/validation-key.txt` should return your mainnet key.
 - `curl https://testnet.triumphsynergy.com/validation-key.txt` should return your testnet key.
 
+Note: `vercel.json` contains placeholders for secrets. To enable production features, add the required secrets in the Vercel Dashboard → Project → Settings → Environment Variables (use the exact names listed in `vercel.json`, e.g. `PI_API_KEY`, `PI_MAINNET_VALIDATION_KEY`).
+
 6. In Pi App Studio (open via Pi Browser): add the domains to Mainnet and Testnet and click Verify Domain.
 
 Important implementation detail: validation routes must be registered before static middleware so Host header detection can return the correct key per domain.
