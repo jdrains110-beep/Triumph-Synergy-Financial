@@ -362,6 +362,16 @@ npm run lint
 npm test
 ```
 
+## Vercel Deployment
+
+This repository is configured to automatically deploy to Vercel on push to the `main` branch. To enable automatic deployments, an admin must add the following repository secrets (Settings → Secrets and variables → Actions):
+
+- `VERCEL_TOKEN` — A Vercel personal token with deploy permissions. Create at https://vercel.com/account/tokens.
+- `VERCEL_ORG_ID` — The Vercel Organization / Team ID (if applicable).
+- `VERCEL_PROJECT_ID` — The Vercel Project ID for this project.
+
+For detailed setup instructions, see [.github/SETUP.md](.github/SETUP.md).
+
 ## License
 
 MIT
