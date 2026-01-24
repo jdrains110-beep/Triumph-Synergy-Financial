@@ -52,8 +52,7 @@ export interface AppConfig {
   
   // Security Configuration
   security: {
-    jwtSecret: string;
-    jwtExpiresIn: string;
+
     bcryptRounds: number;
     corsOrigin: string;
   };
@@ -103,8 +102,7 @@ export const config: AppConfig = {
   },
   
   security: {
-    jwtSecret: process.env.JWT_SECRET || 'triumph_synergy_jwt_secret_2026_production_key',
-    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
+
     bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '10', 10),
     corsOrigin: process.env.CORS_ORIGIN || '*'
   },

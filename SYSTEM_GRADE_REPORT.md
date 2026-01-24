@@ -22,7 +22,7 @@ The Triumph Synergy Financial system has been thoroughly audited and optimized. 
 - ✅ Clear layering (framework → services → API)
 
 ### Security: **A+** (100/100)
-- ✅ JWT authentication
+-- ✅ Secure authentication (no JWT)
 - ✅ Password hashing with bcrypt
 - ✅ Rate limiting on auth endpoints (5 req/15min)
 - ✅ Helmet security headers
@@ -114,7 +114,7 @@ npm ci --production
 ### 2. Enterprise-Grade Security
 - Multi-layer security approach
 - Rate limiting prevents brute force
-- JWT tokens for stateless auth
+-- Stateless authentication (no JWT)
 - Password hashing with bcrypt
 - Pi Network secure payment approval
 

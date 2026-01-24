@@ -26,7 +26,7 @@ await framework.initialize();
 - **Core**: Orchestrates all framework components
 - **Logger**: Winston-based centralized logging
 - **Database Manager**: Connection pooling and query execution
-- **Security Module**: JWT, bcrypt, input sanitization
+-- **Security Module**: bcrypt, input sanitization
 - **Validation Module**: Input validation and business rules
 
 ### 2. Main Application Component (triumphsynergydi8363.pinet.com)
@@ -240,7 +240,7 @@ const newService = new NewService(framework);
 NODE_ENV=development
 MAIN_APP_URL=https://triumphsynergydi8363.pinet.com
 FRAMEWORK_URL=https://triumphsynergy0576.pinet.com
-JWT_SECRET=dev_secret_key
+
 ```
 
 ### Production
@@ -248,7 +248,7 @@ JWT_SECRET=dev_secret_key
 NODE_ENV=production
 MAIN_APP_URL=https://triumphsynergydi8363.pinet.com
 FRAMEWORK_URL=https://triumphsynergy0576.pinet.com
-JWT_SECRET=<strong_random_secret>
+
 DB_HOST=<production_db_host>
 ```
 

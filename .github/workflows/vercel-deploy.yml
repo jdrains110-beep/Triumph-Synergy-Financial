@@ -1,0 +1,70 @@
+name: Vercel Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and log
+        run: |
+          mkdir -p build-logs
+          npm run build 2>&1 | tee build-logs/build.log
+        env:
+          PI_TESTNET_VALIDATION_KEY: ${{ secrets.PI_TESTNET_VALIDATION_KEY }}
+          PI_MAINNET_VALIDATION_KEY: ${{ secrets.PI_MAINNET_VALIDATION_KEY }}
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build-logs/build.log
+
+  deploy:
+    name: Deploy (requires approval)
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Vercel Deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel --prod --confirm
+
+      - name: Post-deploy: check deployed validation keys
+        run: |
+          mkdir -p validation-logs
+          export PI_MAINNET_VALIDATION_KEY="${{ secrets.PI_MAINNET_VALIDATION_KEY }}"
+          export PI_TESTNET_VALIDATION_KEY="${{ secrets.PI_TESTNET_VALIDATION_KEY }}"
+          npm run check-deployed-validation 2>&1 | tee validation-logs/validation-check.log || true
+
+      - name: Upload validation check logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-logs
+          path: validation-logs/validation-check.log

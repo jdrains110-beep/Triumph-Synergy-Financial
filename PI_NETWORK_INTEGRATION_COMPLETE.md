@@ -60,7 +60,7 @@
 
 ### Backend Stack
 - **Framework:** Express.js + TypeScript
-- **Authentication:** JWT + Pi Network OAuth
+-- **Authentication:** Pi Network OAuth
 - **Security:** Helmet, CORS, Rate Limiting
 - **Logging:** Winston
 - **Pi SDK:** Custom TypeScript implementation
@@ -107,7 +107,7 @@ PI_APP_NAME=Triumph Synergy Financial
 # Application (existing)
 NODE_ENV=production
 PORT=3000
-JWT_SECRET=your_secret_here
+
 CORS_ORIGIN=https://yourapp.com
 ```
 
@@ -297,4 +297,4 @@ For questions or support, refer to the comprehensive documentation in:
 - `README.md` - Quick start guide
 - `ARCHITECTURE.md` - System architecture
 
-**Happy Building on Pi Network! 🥧**
+### Happy Building on Pi Network! 🥧

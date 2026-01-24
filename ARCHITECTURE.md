@@ -53,7 +53,7 @@ The framework provides reusable, modular components:
    - Connection health checks
 
 4. **Security Module**
-   - JWT token generation and verification
+   - Secure authentication (no JWT)
    - Password hashing with bcrypt
    - Input sanitization (XSS prevention)
    - Email validation
@@ -79,7 +79,7 @@ The main application leverages the framework:
 
 1. **User Service**
    - User registration with validation
-   - Authentication with JWT
+   - Authentication (no JWT)
    - User profile management
    - Password security
    - **Pi Network user authentication**
@@ -164,7 +164,7 @@ Client Request (Pi Browser or Web)
 │  1. HTTPS/TLS (Transport Security)          │
 │  2. Helmet (HTTP Headers Security)          │
 │  3. CORS (Cross-Origin Resource Sharing)    │
-│  4. JWT Authentication                       │
+│  4. Secure Authentication (no JWT)           │
 │  5. Password Hashing (bcrypt)               │
 │  6. Input Validation & Sanitization         │
 │  7. Transaction Validation                   │
@@ -184,7 +184,7 @@ The framework is designed as independent, reusable modules that can be composed 
 ### 3. Security First
 - All inputs are validated
 - Passwords are never stored in plain text
-- JWT tokens for stateless authentication
+
 - XSS prevention through input sanitization
 
 ### 4. Scalability

@@ -1,0 +1,10 @@
+name: 'Check Validation Keys'
+description: 'Post-deploy validation key check for Pi Network'
+runs:
+  using: 'composite'
+  steps:
+    - name: Run validation check
+      shell: bash
+      run: |
+        mkdir -p validation-logs
+        npm run check-deployed-validation 2>&1 | tee validation-logs/validation-check.log || true

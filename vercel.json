@@ -28,7 +28,7 @@
     "NEXT_PUBLIC_OWNER_USER_ID": "@next_public_owner_user_id",
     "NEXT_PUBLIC_OWNER_USERNAME": "@next_public_owner_username",
     "NEXT_PUBLIC_BACKEND_URL": "@next_public_backend_url",
-    "NEXT_PUBLIC_API_BASE_URL": "@next_public_api_base_url",
-    "JWT_SECRET": "@jwt_secret"
+    "NEXT_PUBLIC_API_BASE_URL": "@next_public_api_base_url"
+
   }
 }

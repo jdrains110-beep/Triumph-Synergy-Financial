@@ -113,7 +113,7 @@ Response: { user, token, piUser }
 5. Frontend sends token to backend
 6. Backend verifies with Pi Platform API
 7. Backend creates/updates user in database
-8. Backend returns JWT token for app authentication
+8. Backend returns token for app authentication (no JWT)
 
 ### 2. Payment Flow (User-to-App)
 
@@ -171,7 +171,7 @@ Pi.createPayment({
 
 #### Backend Endpoints
 
-**Approve Payment**
+### Approve Payment
 ```
 POST /api/pi/payments/:paymentId/approve
 ```
@@ -179,7 +179,7 @@ POST /api/pi/payments/:paymentId/approve
 - Approves payment on Pi Network
 - Returns: Payment object with approval status
 
-**Complete Payment**
+### Complete Payment
 ```
 POST /api/pi/payments/:paymentId/complete
 Body: { txid: "blockchain_transaction_id" }
@@ -188,13 +188,13 @@ Body: { txid: "blockchain_transaction_id" }
 - Marks payment as complete
 - Returns: Completed payment object
 
-**Get Payment Status**
+### Get Payment Status
 ```
 GET /api/pi/payments/:paymentId
 ```
 - Returns: Full payment object with status
 
-**Get Incomplete Payments**
+### Get Incomplete Payments
 ```
 GET /api/pi/payments/incomplete/:userUid
 ```
@@ -329,21 +329,21 @@ In sandbox mode:
 
 ### Common Issues
 
-**Issue: "Pi SDK not initialized"**
+#### Issue: "Pi SDK not initialized"
 - Solution: Ensure Pi SDK script loads before app code
 - Check: `<script src="https://sdk.minepi.com/pi-sdk.js"></script>`
 
-**Issue: "Authentication failed"**
+#### Issue: "Authentication failed"
 - Solution: Verify PI_API_KEY is correct
 - Check: Environment variable is set
 - Test: API key from develop.pi portal
 
-**Issue: "Payment approval failed"**
+#### Issue: "Payment approval failed"
 - Solution: Check backend logs for errors
 - Verify: Server can reach Pi Platform API
 - Check: Payment amount is valid (> 0)
 
-**Issue: "CORS error"**
+#### Issue: "CORS error"
 - Solution: Update CORS_ORIGIN in .env
 - Set to your frontend URL or '*' for development
 
