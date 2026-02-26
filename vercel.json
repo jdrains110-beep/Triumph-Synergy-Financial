@@ -14,21 +14,21 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "PI_API_KEY": "@pi_api_key",
-    "PI_TESTNET_API_KEY": "@pi_testnet_api_key",
-    "PI_MAINNET_API_KEY": "@pi_mainnet_api_key",
+    "PI_API_KEY": "",
+    "PI_TESTNET_API_KEY": "",
+    "PI_MAINNET_API_KEY": "",
     "PI_API_URL": "https://api.minepi.com",
     "PI_SANDBOX_MODE": "false",
     "PI_APP_NAME": "Triumph Synergy Financial",
-    "PI_TESTNET_WALLET_ADDRESS": "@pi_testnet_wallet_address",
-    "PI_TESTNET_VALIDATION_KEY": "@pi_testnet_validation_key",
-    "PI_MAINNET_VALIDATION_KEY": "@pi_mainnet_validation_key",
-    "NEXT_PUBLIC_PI_APP_ID": "@next_public_pi_app_id",
-    "NEXT_PUBLIC_OWNER_PI_ADDRESS": "@next_public_owner_pi_address",
-    "NEXT_PUBLIC_OWNER_USER_ID": "@next_public_owner_user_id",
-    "NEXT_PUBLIC_OWNER_USERNAME": "@next_public_owner_username",
-    "NEXT_PUBLIC_BACKEND_URL": "@next_public_backend_url",
-    "NEXT_PUBLIC_API_BASE_URL": "@next_public_api_base_url"
+    "PI_TESTNET_WALLET_ADDRESS": "",
+    "PI_TESTNET_VALIDATION_KEY": "",
+    "PI_MAINNET_VALIDATION_KEY": "",
+    "NEXT_PUBLIC_PI_APP_ID": "",
+    "NEXT_PUBLIC_OWNER_PI_ADDRESS": "",
+    "NEXT_PUBLIC_OWNER_USER_ID": "",
+    "NEXT_PUBLIC_OWNER_USERNAME": "",
+    "NEXT_PUBLIC_BACKEND_URL": "",
+    "NEXT_PUBLIC_API_BASE_URL": ""
 
   }
 }

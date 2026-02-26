@@ -83,11 +83,8 @@ export class UserService {
       throw new Error('Invalid credentials');
     }
 
-    const token = security.generateToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role
-    });
+    // JWT generation removed; return an empty token or implement session handling separately
+    const token = '';
 
     logger.info('User authenticated', { userId: user.id, email: user.email });
 
